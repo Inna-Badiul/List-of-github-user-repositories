@@ -34,6 +34,13 @@ $(function() {
     },
     _setRepos: function(repoList){
       this.repos = repoList
+      console.log(repoList)
+    },
+    findById: function(repoId){
+      var selectedRepo = _.find(this.repos, function(o) {
+        return o.id === repoId;
+      });
+      return selectedRepo;
     }
   }
   var resultPageContr = {
@@ -52,7 +59,18 @@ $(function() {
       console.log('this user is not exist')
       $("#repos-wrapper").html(this.notFoundRepositoryFunk);
     },
+    addEvent: function() {
+      console.log('event')
+      $pageWrapper.on('click','.repository',this.openRepository.bind(this));
+    },
+    openRepository: function(event){
+      var userName =  this.$userName.val();
+      var repositoryId = $(event.currentTarget).attr('data-id');
+      console.log(repositoryId);
+      router.setRoute('/search/' + userName + "/" + repositoryId);
+    },
     init: function(currentUser){
+      this.$userName = $("#userName");
       $pageWrapper.html(this.resultPageFunction);
       console.log('search user')
       $('.loader').show();
@@ -61,12 +79,25 @@ $(function() {
         this.createRepositoryList.bind(this),
         this.notFoundRepository.bind(this)
       );
+      this.addEvent();
     }
   };
-
+  var repositoryPageContr = {
+    repositoryPageFunction: _.template($("#current-repository-page").html()),
+    init: function(userName, repoId) {
+      console.log(repoId)
+      console.log('in repository');
+      var currentRepo = Model.findById(parseInt(repoId));
+      var reposOptions = this.repositoryPageFunction({
+        repository: currentRepo
+      })
+      $pageWrapper.html(reposOptions);
+    },
+  }
   var routes = {
     '/search': searchPageContr.init.bind(searchPageContr),
-    '/search/:user': resultPageContr.init.bind(resultPageContr)
+    '/search/:user': resultPageContr.init.bind(resultPageContr),
+    '/search/:user/:repositoryId': repositoryPageContr.init.bind(repositoryPageContr)
   }
 
   var router = Router(routes).init('/search');

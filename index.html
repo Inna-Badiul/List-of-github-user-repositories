@@ -25,11 +25,19 @@
   </script>
   <script type="text/template" id="repo-list">
     <% for(var i=0; i<repositoryList.length; i++) {%>
-      <div class='repository'><%= repositoryList[i].name %></div>
+      <div class='repository' data-id=<%= repositoryList[i].id %>><%= repositoryList[i].name %> </div>
     <% } %>
   </script>
   <script type="text/template" id="user-not-exist">
    404 (Not Found)
+  </script>
+  <script type="text/template" id="current-repository-page">
+    <div class='current-repository'>
+      <div class = 'repo-name'>Name : <%= repository.name %></div>
+      <div class='description'>Description : <%= repository.description %><div>
+      <div class='fork'>Forks : <%= repository.forks %></div>
+      <div class='size'>Size : <%= repository.size %></div>
+    </div>
   </script>
 </body>
 </html>
