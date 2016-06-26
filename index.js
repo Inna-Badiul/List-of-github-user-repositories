@@ -1,5 +1,4 @@
 $(function() {
-
   var $pageWrapper = $("#page-wrapper");
 
   var searchPageContr = {
@@ -84,14 +83,27 @@ $(function() {
   };
   var repositoryPageContr = {
     repositoryPageFunction: _.template($("#current-repository-page").html()),
+    repositoryRender: function(repoId){
+      var selectedRepo = Model.findById(parseInt(repoId));
+      var reposOptions = this.repositoryPageFunction({
+        repository: selectedRepo
+      });
+      $pageWrapper.html(reposOptions);
+    },
     init: function(userName, repoId) {
+      if(Model.repos === undefined){
+        var cuuReps = Model.getReposByUserName(
+           userName,
+           (function(){
+              this.repositoryRender(repoId);
+           }).bind(this)
+        );
+
+      } else{
+        this.repositoryRender(repoId);
+      }
       console.log(repoId)
       console.log('in repository');
-      var currentRepo = Model.findById(parseInt(repoId));
-      var reposOptions = this.repositoryPageFunction({
-        repository: currentRepo
-      })
-      $pageWrapper.html(reposOptions);
     },
   }
   var routes = {
