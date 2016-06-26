@@ -4,13 +4,11 @@ $(function() {
   var searchPageContr = {
     searchPageFunction: _.template($("#search-page").html()),
     init: function() {
-      console.log('in init')
       $pageWrapper.html(this.searchPageFunction);
       this.$userName = $("#userName");
       this.addEvent();
     },
     addEvent: function() {
-      console.log('event')
       this.$userName.keyup(this.readUsername.bind(this));
     },
     readUsername: function(event) {
@@ -32,8 +30,7 @@ $(function() {
       requestObj.error(errorCb);
     },
     _setRepos: function(repoList){
-      this.repos = repoList
-      console.log(repoList)
+      this.repos = repoList;
     },
     findById: function(repoId){
       var selectedRepo = _.find(this.repos, function(o) {
@@ -41,7 +38,7 @@ $(function() {
       });
       return selectedRepo;
     }
-  }
+  };
   var resultPageContr = {
     resultPageFunction: _.template($("#results-page").html()),
     repolistFunction: _.template($("#repo-list").html()),
@@ -55,11 +52,9 @@ $(function() {
     },
     notFoundRepository: function(){
       $('.loader').hide();
-      console.log('this user is not exist')
       $("#repos-wrapper").html(this.notFoundRepositoryFunk);
     },
     addEvent: function() {
-      console.log('event')
       $pageWrapper.on('click','.repository',this.openRepository.bind(this));
     },
     openRepository: function(event){
@@ -71,12 +66,11 @@ $(function() {
     init: function(currentUser){
       this.$userName = $("#userName");
       $pageWrapper.html(this.resultPageFunction);
-      console.log('search user')
       $('.loader').show();
       Model.getReposByUserName(
-        currentUser,
-        this.createRepositoryList.bind(this),
-        this.notFoundRepository.bind(this)
+          currentUser,
+          this.createRepositoryList.bind(this),
+          this.notFoundRepository.bind(this)
       );
       this.addEvent();
     }
@@ -93,24 +87,23 @@ $(function() {
     init: function(userName, repoId) {
       if(Model.repos === undefined){
         var cuuReps = Model.getReposByUserName(
-           userName,
-           (function(){
+            userName,
+            (function(){
               this.repositoryRender(repoId);
-           }).bind(this)
+            }).bind(this)
         );
 
       } else{
         this.repositoryRender(repoId);
       }
-      console.log(repoId)
       console.log('in repository');
-    },
-  }
+    }
+  };
   var routes = {
     '/search': searchPageContr.init.bind(searchPageContr),
     '/search/:user': resultPageContr.init.bind(resultPageContr),
     '/search/:user/:repositoryId': repositoryPageContr.init.bind(repositoryPageContr)
-  }
+  };
 
   var router = Router(routes).init('/search');
 });
