@@ -24,9 +24,8 @@
     </div>
 </script>
 <script type="text/template" id="repo-list">
-    <% for(var i=0; i
-    <repositoryList.length; i++) {%>
-    <div class='repository' data-id=<%= repositoryList[i].id %>><%= repositoryList[i].name %></div>
+    <% for(var i=0; i<repositoryList.length; i++) {%>
+    <a href="#/search/<%=userName%>/<%= repositoryList[i].id %>" class='repository'> <%= repositoryList[i].name %></a><br>
     <% } %>
 </script>
 <script type="text/template" id="user-not-exist">
