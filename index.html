@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link type="text/css" rel="stylesheet" href="stylesheet.css"/>
+    <link href='https://fonts.googleapis.com/css?family=Oregano' rel='stylesheet' type='text/css'>
+
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/lodash/lodash.min.js"></script>
     <script src="node_modules/director/build/director.min.js"></script>
@@ -12,9 +14,11 @@
 <body>
 <header></header>
 <div id='page-wrapper'></div>
+
 <script type="text/template" id="search-page">
-    User name: <input id="userName" type="text" name="fname"><br>
-    <input type="submit" value="Submit" id="submit">
+    Type a username to check list of GitHub repositories :) <br>
+    <div class="user-image"></div>
+    <input id="userName" type="text" name="fname" autofocus><br>
 </script>
 <script type="text/template" id="results-page">
     Here is the repo list:
@@ -25,20 +29,24 @@
 </script>
 <script type="text/template" id="repo-list">
     <% for(var i=0; i<repositoryList.length; i++) {%>
+    <div class="folder-image"></div>
     <a href="#/search/<%=userName%>/<%= repositoryList[i].id %>" class='repository'> <%= repositoryList[i].name %></a><br>
     <% } %>
 </script>
 <script type="text/template" id="user-not-exist">
-    404 (Not Found)
+    <h1>404 error</h1>
+    <h2>Page Not Found</h2>
+    <div class='search-image'></div>
+    <p>Sorry but the page you are looking for does not exist.</p>
 </script>
 <script type="text/template" id="current-repository-page">
     <div class='current-repository'>
         <div class='repo-name'>Name : <%= repository.name %></div>
-        <div class='description'>Description : <%= repository.description %>
-            <div>
-                <div class='fork'>Forks : <%= repository.forks %></div>
-                <div class='size'>Size : <%= repository.size %></div>
-            </div>
+        <div class='description'>Description : <%= repository.description %></div>
+        <div class='fork'>Forks : <%= repository.forks %></div>
+        <div class='size'>Size : <%= repository.size %></div>
+    </div>
 </script>
+
 </body>
 </html>

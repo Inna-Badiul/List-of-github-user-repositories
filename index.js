@@ -1,23 +1,6 @@
 $(function () {
     var $pageWrapper = $("#page-wrapper");
 
-    var searchPageContr = {
-        searchPageFunction: _.template($("#search-page").html()),
-        init: function () {
-            $pageWrapper.html(this.searchPageFunction);
-            this.$userName = $("#userName");
-            this.addEvent();
-        },
-        addEvent: function () {
-            this.$userName.keyup(this.readUsername.bind(this));
-        },
-        readUsername: function (event) {
-            if (event.keyCode == 13) {
-                var userName = this.$userName.val();
-                router.setRoute('/search/' + userName);
-            }
-        }
-    };
     var Model = {
         userName: undefined,
         repos: undefined,
@@ -41,10 +24,36 @@ $(function () {
             return selectedRepo;
         }
     };
-    var resultPageContr = {
+
+    var baseCtrl = {
+        notFoundRepositoryFunction: _.template($("#user-not-exist").html()),
+        notFoundRepository: function () {
+            $('.loader').hide();
+            $pageWrapper.html(this.notFoundRepositoryFunction);
+        }
+    };
+
+
+    var searchPageCtrl = {
+        searchPageFunction: _.template($("#search-page").html()),
+        init: function () {
+            $pageWrapper.html(this.searchPageFunction);
+            this.$userName = $("#userName");
+            this.addEvent();
+        },
+        addEvent: function () {
+            this.$userName.keyup(this.readUsername.bind(this));
+        },
+        readUsername: function (event) {
+            if (event.keyCode == 13) {
+                var userName = this.$userName.val();
+                router.setRoute('/search/' + userName);
+            }
+        }
+    };
+    var resultPageCtrl = {
         resultPageFunction: _.template($("#results-page").html()),
         repolistFunction: _.template($("#repo-list").html()),
-        notFoundRepositoryFunk: _.template($("#user-not-exist").html()),
         createRepositoryList: function () {
             $('.loader').hide();
             var repoListHtml = this.repolistFunction({
@@ -53,11 +62,8 @@ $(function () {
             });
             $("#repos-wrapper").html(repoListHtml);
         },
-        notFoundRepository: function () {
-            $('.loader').hide();
-            $("#repos-wrapper").html(this.notFoundRepositoryFunk);
-        },
-  
+
+
         init: function (currentUser) {
             this.$userName = $("#userName");
             $pageWrapper.html(this.resultPageFunction);
@@ -69,14 +75,20 @@ $(function () {
             );
         }
     };
-    var repositoryPageContr = {
+    _.assignIn(resultPageCtrl, baseCtrl);
+    //------------
+    var repositoryPageCtrl = {
         repositoryPageFunction: _.template($("#current-repository-page").html()),
         repositoryRender: function (repoId) {
             var selectedRepo = Model.findById(parseInt(repoId));
-            var reposOptions = this.repositoryPageFunction({
-                repository: selectedRepo
-            });
-            $pageWrapper.html(reposOptions);
+            if(selectedRepo===undefined){
+                this.notFoundRepository();
+            }else {
+                var reposOptions = this.repositoryPageFunction({
+                    repository: selectedRepo
+                });
+                $pageWrapper.html(reposOptions);
+            }
         },
         init: function (userName, repoId) {
             if (Model.repos === undefined) {
@@ -84,6 +96,9 @@ $(function () {
                     userName,
                     (function () {
                         this.repositoryRender(repoId);
+                    }).bind(this),
+                    (function(){
+                        this.notFoundRepository();
                     }).bind(this)
                 );
 
@@ -93,10 +108,13 @@ $(function () {
             console.log('in repository');
         }
     };
+
+    _.assignIn(repositoryPageCtrl, baseCtrl);
+
     var routes = {
-        '/search': searchPageContr.init.bind(searchPageContr),
-        '/search/:user': resultPageContr.init.bind(resultPageContr),
-        '/search/:user/:repositoryId': repositoryPageContr.init.bind(repositoryPageContr)
+        '/search': searchPageCtrl.init.bind(searchPageCtrl),
+        '/search/:user': resultPageCtrl.init.bind(resultPageCtrl),
+        '/search/:user/:repositoryId': repositoryPageCtrl.init.bind(repositoryPageCtrl)
     };
 
     var router = Router(routes).init('/search');
