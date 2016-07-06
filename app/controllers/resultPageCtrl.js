@@ -1,11 +1,12 @@
-var resultPageCtrl = {
+var App = App || {};
+App.resultPageCtrl = {
     resultPageFunction: _.template($("#results-page").html()),
     repolistFunction: _.template($("#repo-list").html()),
     createRepositoryList: function () {
         $('.loader').hide();
         var repoListHtml = this.repolistFunction({
-            repositoryList: Model.repos,
-            userName: Model.userName
+            repositoryList: App.Model.repos,
+            userName: App.Model.userName
         });
         $("#repos-wrapper").html(repoListHtml);
     },
@@ -15,11 +16,11 @@ var resultPageCtrl = {
         this.$userName = $("#userName");
         this.$pageWrapper.html(this.resultPageFunction);
         $('.loader').show();
-        Model.getReposByUserName(
+        App.Model.getReposByUserName(
             currentUser,
             this.createRepositoryList.bind(this),
             this.notFoundRepository.bind(this)
         );
     }
 };
-_.assignIn(resultPageCtrl, baseCtrl);
+_.assignIn(App.resultPageCtrl, App.baseCtrl);

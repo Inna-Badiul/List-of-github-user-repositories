@@ -1,4 +1,5 @@
-var searchPageCtrl = {
+var App = App || {};
+App.searchPageCtrl = {
     searchPageFunction: _.template($("#search-page").html()),
     init: function () {
         this.$pageWrapper.html(this.searchPageFunction);
@@ -15,4 +16,4 @@ var searchPageCtrl = {
         }
     }
 };
-_.assignIn(searchPageCtrl, baseCtrl);
+_.assignIn(App.searchPageCtrl, App.baseCtrl);

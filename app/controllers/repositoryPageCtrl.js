@@ -1,7 +1,8 @@
-var repositoryPageCtrl = {
+var App = App || {};
+App.repositoryPageCtrl = {
     repositoryPageFunction: _.template($("#current-repository-page").html()),
     repositoryRender: function (repoId) {
-        var selectedRepo = Model.findById(parseInt(repoId));
+        var selectedRepo = App.Model.findById(parseInt(repoId));
         if(selectedRepo===undefined){
             this.notFoundRepository();
         }else {
@@ -12,8 +13,8 @@ var repositoryPageCtrl = {
         }
     },
     init: function (userName, repoId) {
-        if (Model.repos === undefined) {
-            var cuuReps = Model.getReposByUserName(
+        if (App.Model.repos === undefined) {
+            var cuuReps = App.Model.getReposByUserName(
                 userName,
                 (function () {
                     this.repositoryRender(repoId);
@@ -29,4 +30,4 @@ var repositoryPageCtrl = {
     }
 };
 
-_.assignIn(repositoryPageCtrl, baseCtrl);
+_.assignIn(App.repositoryPageCtrl, App.baseCtrl);

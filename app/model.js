@@ -1,4 +1,5 @@
-var Model = {
+var App = App || {};
+App.Model = {
     userName: undefined,
     repos: undefined,
     getReposByUserName: function (userName, successCb, errorCb) {

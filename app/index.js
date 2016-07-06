@@ -1,8 +1,10 @@
 var routes = {
-    '/search': searchPageCtrl.init.bind(searchPageCtrl),
-    '/search/:user': resultPageCtrl.init.bind(resultPageCtrl),
-    '/search/:user/:repositoryId': repositoryPageCtrl.init.bind(repositoryPageCtrl)
+    '/search': App.searchPageCtrl.init.bind(App.searchPageCtrl),
+    '/search/:user': App.resultPageCtrl.init.bind(App.resultPageCtrl),
+    '/search/:user/:repositoryId': App.repositoryPageCtrl.init.bind(App.repositoryPageCtrl)
 };
 
+
 var router = Router(routes).init('/search');
+
 
