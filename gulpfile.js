@@ -28,10 +28,10 @@ gulp.task('copy', function(){
     return gulp.src(filesToCopy)
         .pipe(gulp.dest('dist'));
 });
+
 gulp.task('copy:images', function(){
     return gulp.src('app/images/*')
         .pipe(gulp.dest('dist/images'));
 });
-
 
 gulp.task('default', ['scripts','copy:images','copy']);
